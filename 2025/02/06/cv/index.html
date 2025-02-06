@@ -1,0 +1,307 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Introduction to Computer Vision | noctua's Wiki</title><noscript>Please enable JavaScript to view the site</noscript><link rel="icon" href="/img/pwa/favicon.png"><!-- index.css--><link rel="stylesheet" href="/css/index.css?v=3.0.10"><!-- inject head--><link rel="canonical" href="http://example.com/2025/02/06/cv/index.html"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css"><!-- aplayer--><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"><!-- swiper--><!-- fancybox ui--><!-- katex--><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css"><!-- Open Graph--><meta name="description" content="Introduction to Computer Vision (CV)What is Computer Vision?Computer Vision (CV) is a multidisciplinary field that enables machines to interpret and u"><!-- pwa--><meta name="apple-mobile-web-app-capable" content="noctua's Wiki"><meta name="theme-color" content="var(--efu-main)"><meta name="apple-mobile-web-app-status-bar-style" content="var(--efu-main)"><link rel="bookmark" href="/img/pwa/favicon.png"><link rel="apple-touch-icon" href="/img/pwa/favicon.png" sizes="180x180"><script>console.log(' %c Solitude %c ' + '3.0.10' + ' %c https://github.com/everfu/hexo-theme-solitude',
+    'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+    'background:#ff9a9a ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+    'background:unset ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff')
+</script><script>(()=>{
+        const saveToLocal = {
+            set: function setWithExpiry(key, value, ttl) {
+                if (ttl === 0)
+                    return
+                const now = new Date()
+                const expiryDay = ttl * 86400000
+                const item = {
+                    value: value,
+                    expiry: now.getTime() + expiryDay
+                }
+                localStorage.setItem(key, JSON.stringify(item))
+            },
+            get: function getWithExpiry(key) {
+                const itemStr = localStorage.getItem(key)
+
+                if (!itemStr) {
+                    return undefined
+                }
+                const item = JSON.parse(itemStr)
+                const now = new Date()
+
+                if (now.getTime() > item.expiry) {
+                    localStorage.removeItem(key)
+                    return undefined
+                }
+                return item.value
+            }
+        };
+        window.utils = {
+            saveToLocal: saveToLocal,
+            getCSS: (url, id = false) => new Promise((resolve, reject) => {
+              const link = document.createElement('link')
+              link.rel = 'stylesheet'
+              link.href = url
+              if (id) link.id = id
+              link.onerror = reject
+              link.onload = link.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                link.onload = link.onreadystatechange = null
+                resolve()
+              }
+              document.head.appendChild(link)
+            }),
+            getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+              const script = document.createElement('script')
+              script.src = url
+              script.async = true
+              script.onerror = reject
+              script.onload = script.onreadystatechange = function() {
+                const loadState = this.readyState
+                if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+                script.onload = script.onreadystatechange = null
+                resolve()
+              }
+
+              Object.keys(attr).forEach(key => {
+                script.setAttribute(key, attr[key])
+              })
+
+              document.head.appendChild(script)
+            }),
+            addGlobalFn: (key, fn, name = false, parent = window) => {
+                const globalFn = parent.globalFn || {}
+                const keyObj = globalFn[key] || {}
+
+                if (name && keyObj[name]) return
+
+                name = name || Object.keys(keyObj).length
+                keyObj[name] = fn
+                globalFn[key] = keyObj
+                parent.globalFn = globalFn
+            },
+            addEventListenerPjax: (ele, event, fn, option = false) => {
+              ele.addEventListener(event, fn, option)
+              utils.addGlobalFn('pjax', () => {
+                  ele.removeEventListener(event, fn, option)
+              })
+          },
+        }
+    })()</script><!-- theme--><script>initTheme = () => {
+    let isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const cachedMode = utils.saveToLocal.get('theme');
+    if (cachedMode === undefined) {
+        const nowMode =
+            isDarkMode ? 'dark' : 'light'
+        document.documentElement.setAttribute('data-theme', nowMode);
+    } else {
+        document.documentElement.setAttribute('data-theme', cachedMode);
+    }
+    typeof rm === 'object' && rm.mode(cachedMode === 'dark' && isDarkMode)
+}
+initTheme()</script><!-- global head--><script>const GLOBAL_CONFIG = {
+    root: '/',
+    algolia: undefined,
+    localsearch: {"preload":false,"path":"/search.xml"},
+    runtime: '2023-04-01 00:00:00',
+    lazyload: {
+        enable: false,
+        error: '/img/error_load.avif'
+    },
+    copyright: false,
+    highlight: {"limit":200,"expand":true,"copy":true,"syntax":"highlight.js"},
+    randomlink: false,
+    lang: {"theme":{"dark":"Dark","light":"Light"},"copy":{"success":"Copied","error":"Copy failed"},"backtop":"Back to top","time":{"day":" days ago","hour":" hours ago","just":"just","min":" minutes ago","month":" months ago"},"day":" days","f12":"Developer mode is turned on, please follow the GPL.","totalk":"You don't need to delete blank lines, just type in your comments.","search":{"empty":"No results found","hit":"Found ${query} results for you","placeholder":"Enter keywords to search","count":"Total <b>${count}</b> results.","loading":"Loading..."}},
+    aside: {
+        state: {
+            morning: "✨",
+            noon: "🍲",
+            afternoon: "🌞",
+            night: "🌙",
+            goodnight: "😴",
+        },
+        witty_words: ["Good luck, stranger","You can do it"],
+        witty_comment: {
+            prefix: 'Long time no see, ',
+            back: 'Welcome back again,',
+        },
+    },
+    covercolor: {
+        enable: false
+    },
+    comment: false,
+    lightbox: 'null',
+    post_ai: false,
+    right_menu: false,
+    translate: false,
+    lure: false,
+    expire: false,
+};</script><!-- page-config head--><script id="config-diff">var PAGE_CONFIG = {
+    is_post: true,
+    is_page: false,
+    is_home: false,
+    page: '',
+    toc: true,
+    comment: true,
+    ai_text: false,
+    color: false,
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body id="body"><!-- universe--><canvas id="universe"></canvas><!-- background img--><!-- loading--><!-- console--><div id="console"><div class="close-btn" onclick="sco.hideConsole()"><i class="solitude fas fa-xmark"></i></div><div class="console-card-group"><div class="console-card-group-right"><div class="console-card tags" onclick="sco.hideConsole()"><div class="card-content"><div class="author-content-item-tips">Tags</div><div class="author-content-item-title">Find interesting areas</div></div><div class="card-tag-cloud"><a href="/tags/Computer-Vision/">Computer Vision<sup>1</sup></a><a href="/tags/Deep-Learning/">Deep Learning<sup>1</sup></a><a href="/tags/Image-Processing/">Image Processing<sup>1</sup></a><a href="/tags/AI/">AI<sup>1</sup></a></div></div><div class="console-card history" onclick="sco.hideConsole()"><ul class="card-archive-list"><li class="item"><a href="/archives/2025/02/"><span class="date">2025/02</span><div class="count-group"><span class="count">1</span><span class="unit">Posts</span></div></a></li><li class="item"><a href="/archives/2024/02/"><span class="date">2024/02</span><div class="count-group"><span class="count">1</span><span class="unit">Posts</span></div></a></li><li class="item"><a href="/archives/"><span class="date">All posts</span><div class="count-group"><span class="count">2</span><span class="unit">Posts</span></div></a></li></ul></div></div></div><div class="button-group"><div class="console-btn-item"><span class="darkmode_switchbutton" onclick="sco.switchDarkMode()" title="Day and night mode"><i class="solitude fas fa-circle-half-stroke"></i></span></div><div class="console-btn-item" id="consoleHideAside"><span class="asideSwitch" onclick="sco.switchHideAside()" title="Sidebar display control"><i class="solitude fas fa-arrows-left-right-to-line"></i></span></div><div class="console-btn-item" id="consoleMusic" onclick="sco.musicToggle()"><span class="music-switch" title="Music switch"><i class="solitude fas fa-compact-disc"></i></span></div></div><div class="console-mask" onclick="sco.hideConsole()"></div></div><!-- sidebar--><div id="sidebar" style="zoom: 1;"><div id="menu-mask" style="display: none;"></div><div id="sidebar-menus"><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Archives</div><div class="length-num">2</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">4</div></a></div></div></div><span class="sidebar-menu-item-title">Function</span><div class="sidebar-menu-item"><span class="darkmode_switchbutton menu-child" onclick="sco.switchDarkMode()"><i class="solitude fas fa-circle-half-stroke"></i><span>Display mode</span></span></div><span class="sidebar-menu-item-title">Tags</span><div class="card-tags"><div class="card-tag-cloud"><a href="/tags/Computer-Vision/">Computer Vision<sup>1</sup></a><a href="/tags/Deep-Learning/">Deep Learning<sup>1</sup></a><a href="/tags/Image-Processing/">Image Processing<sup>1</sup></a><a href="/tags/AI/">AI<sup>1</sup></a></div></div></div></div><!-- keyboard--><!-- righhtside--><div class="needEndHide" id="rightside"><div class="rs_hide"><button class="mode" type="button" title="Mode" onclick="sco.switchDarkMode()"><i class="fas fa-circle-half-stroke"></i></button><button class="aside pc" type="button" title="Sidebar" onclick="sco.switchHideAside()"><i class="fas fa-arrows-alt-h"></i></button></div><div class="rs_show"><button class="config" type="button" title="Settings" onclick="document.querySelector(&quot;.rs_hide&quot;).classList.toggle(&quot;show&quot;)"><i class="fas fa-gear fa-spin"></i></button><button class="mobile toc" type="button" title="Toc" onclick="document.querySelector('#card-toc').classList.toggle('open')"><i class="fas fa-list"></i></button><button class="comment" type="button" title="Comment" onclick="sco.scrollTo('post-comment')"><i class="fas fa-comment"></i></button><button class="top" type="button" title="Top" onclick="sco.toTop()"><i class="fas fa-arrow-up"></i><span id="percent">0</span></button></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav class="show" id="nav"><div id="nav-group"><div id="blog_name"><a id="site-name" href="/" title="Back to home"><span class="title">noctua's Wiki</span><i class="solitude fas fa-home"></i></a></div><div id="page-name-mask"><div id="page-name"><a id="page-name-text" onclick="sco.toTop()">Introduction to Computer Vision</a></div></div><div id="menus"></div><div id="nav-left"></div><div id="nav-right"><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="Search"><i class="solitude fas fa-magnifying-glass"></i></a></div><div class="nav-button" id="nav-console"><a class="console_switchbutton" onclick="sco.showConsole()" title="Console" href="javascript:void(0);"><label><i class="left"></i><i class="center"></i><i class="right"></i></label></a></div><div id="toggle-menu"><a class="site-page"><i class="solitude fas fa-bars"></i></a></div></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original" title="This article is a Original article, pay attention to the copyright.">Original</a><span class="post-meta-categories"><a class="post-meta-categories" href="/categories/CV/">CV</a></span><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Computer-Vision/"><span class="tags-name tags-punctuation"><i class="solitude fas fa-hashtag"></i>Computer Vision</span></a><a class="post-meta__tags" href="/tags/Deep-Learning/"><span class="tags-name tags-punctuation"><i class="solitude fas fa-hashtag"></i>Deep Learning</span></a><a class="post-meta__tags" href="/tags/Image-Processing/"><span class="tags-name tags-punctuation"><i class="solitude fas fa-hashtag"></i>Image Processing</span></a><a class="post-meta__tags" href="/tags/AI/"><span class="tags-name tags-punctuation"><i class="solitude fas fa-hashtag"></i>AI</span></a></div></div></div></div><h1 class="post-title">Introduction to Computer Vision</h1><div id="post-meta"><div class="meta-secondline"></div></div></div><div id="post-info-bottom"></div><article class="post-content article-container"><h1 id="Introduction-to-Computer-Vision-CV"><a href="#Introduction-to-Computer-Vision-CV" class="headerlink" title="Introduction to Computer Vision (CV)"></a>Introduction to Computer Vision (CV)</h1><h2 id="What-is-Computer-Vision"><a href="#What-is-Computer-Vision" class="headerlink" title="What is Computer Vision?"></a>What is Computer Vision?</h2><p>Computer Vision (CV) is a multidisciplinary field that enables machines to interpret and understand the visual world. By leveraging digital images and videos, computer vision aims to automate tasks that the human visual system can perform. It involves techniques for acquiring, processing, analyzing, and understanding visual information. The ultimate goal is to enable machines to “see” and comprehend their environment.</p>
+<h2 id="Key-Challenges-in-Computer-Vision"><a href="#Key-Challenges-in-Computer-Vision" class="headerlink" title="Key Challenges in Computer Vision"></a>Key Challenges in Computer Vision</h2><p>Computer vision is a challenging domain due to several factors:</p>
+<ul>
+<li><strong>Ambiguity in images</strong>: Visual data often contains noise, inconsistencies, and multiple interpretations.</li>
+<li><strong>Complexity in understanding context</strong>: Computers need to understand context (e.g., background, environment, lighting) to make accurate predictions.</li>
+<li><strong>Variations in object appearance</strong>: Variations in size, pose, or lighting conditions can make objects look different, even though they belong to the same category.</li>
+</ul>
+<h2 id="Major-Areas-of-Computer-Vision"><a href="#Major-Areas-of-Computer-Vision" class="headerlink" title="Major Areas of Computer Vision"></a>Major Areas of Computer Vision</h2><ol>
+<li><p><strong>Image Classification</strong><br>Image classification is the task of categorizing an image into a predefined class. For example, determining whether an image contains a dog or a cat is a classification problem. Deep Convolutional Neural Networks (CNNs) are typically used for this task, as they excel in identifying patterns in visual data.</p>
+</li>
+<li><p><strong>Object Detection</strong><br>Object detection involves not only recognizing objects but also localizing them in an image. This is typically done by drawing bounding boxes around the objects. Algorithms such as YOLO (You Only Look Once) and Faster R-CNN are popular for real-time object detection applications, from autonomous vehicles to security systems.</p>
+</li>
+<li><p><strong>Semantic Segmentation</strong><br>Semantic segmentation involves classifying each pixel in an image into a category. This is used for detailed understanding, such as identifying the boundaries of objects and distinguishing between foreground and background. It is a critical task in medical image analysis, where segmentation can be used to detect tumors or other abnormal structures in images.</p>
+</li>
+<li><p><strong>Instance Segmentation</strong><br>Instance segmentation combines object detection and semantic segmentation. It assigns a unique label to each instance of an object, even when they belong to the same category. This is useful in scenarios where we need to separate overlapping objects.</p>
+</li>
+<li><p><strong>Pose Estimation</strong><br>Pose estimation aims to detect and track the positions and orientations of objects or human bodies. For example, human pose estimation involves identifying key body joints (like elbows, knees, etc.) and their angles. This has applications in sports, gaming, and rehabilitation.</p>
+</li>
+<li><p><strong>Facial Recognition</strong><br>Facial recognition technology identifies individuals by analyzing unique features of their faces. It is widely used in security systems, social media, and even in smartphones for biometric authentication. This technology typically uses deep learning models trained on large datasets to recognize facial features accurately.</p>
+</li>
+<li><p><strong>Optical Character Recognition (OCR)</strong><br>OCR is the process of converting printed or handwritten text into machine-encoded text. It is used in applications like scanning documents, recognizing text in images, and automated data entry. OCR has advanced significantly due to deep learning, enabling better handling of noisy or distorted text.</p>
+</li>
+</ol>
+<h2 id="Key-Techniques-in-Computer-Vision"><a href="#Key-Techniques-in-Computer-Vision" class="headerlink" title="Key Techniques in Computer Vision"></a>Key Techniques in Computer Vision</h2><ol>
+<li><p><strong>Deep Learning</strong><br>Deep learning, particularly Convolutional Neural Networks (CNNs), has revolutionized computer vision. CNNs are designed to automatically learn spatial hierarchies of features from images, which makes them ideal for tasks like image classification, object detection, and segmentation.</p>
+<p>Some key architectures include:</p>
+<ul>
+<li><strong>AlexNet</strong>: A landmark deep CNN architecture that won the 2012 ImageNet competition and showcased the power of deep learning for image-related tasks.</li>
+<li><strong>VGGNet</strong>: Known for its simplicity and depth, VGGNet achieved remarkable results in object classification.</li>
+<li><strong>ResNet</strong>: Uses residual connections to address the vanishing gradient problem, enabling the training of very deep networks.</li>
+</ul>
+</li>
+<li><p><strong>Data Augmentation</strong><br>Data augmentation involves generating new training data by applying random transformations to existing images, such as rotations, translations, and flipping. This helps increase the diversity of the dataset and improves the model’s ability to generalize.</p>
+</li>
+<li><p><strong>Transfer Learning</strong><br>Transfer learning leverages pre-trained models that have been trained on large datasets, such as ImageNet, and adapts them to specific tasks with limited data. This technique is highly effective in situations where obtaining a large labeled dataset is impractical.</p>
+</li>
+<li><p><strong>Generative Adversarial Networks (GANs)</strong><br>GANs are used for generating new images that resemble a given dataset. For example, GANs can create realistic faces, generate artworks, or produce data to augment training sets. GANs consist of two models: a generator and a discriminator, which are trained together in a competitive manner.</p>
+</li>
+<li><p><strong>Reinforcement Learning in Vision</strong><br>Reinforcement learning (RL) has been increasingly used in computer vision, especially in tasks like robotic manipulation, where the system learns to perform actions in an environment through trial and error. RL helps robots to understand visual cues to make decisions in complex environments.</p>
+</li>
+</ol>
+<h2 id="Applications-of-Computer-Vision"><a href="#Applications-of-Computer-Vision" class="headerlink" title="Applications of Computer Vision"></a>Applications of Computer Vision</h2><ol>
+<li><p><strong>Autonomous Vehicles</strong><br>Self-driving cars rely heavily on computer vision to understand their surroundings. Vision systems detect pedestrians, vehicles, traffic signs, and road lanes, enabling the vehicle to make decisions in real-time. Combining CV with other sensors, like LiDAR, allows vehicles to navigate safely.</p>
+</li>
+<li><p><strong>Medical Imaging</strong><br>Computer vision is used extensively in medical image analysis for tasks such as detecting tumors, diagnosing diseases, and segmenting organs in 3D scans. CV models assist radiologists in providing more accurate diagnoses with greater speed.</p>
+</li>
+<li><p><strong>Retail and Manufacturing</strong><br>In retail, computer vision powers systems like self-checkout counters, product recognition, and inventory management. In manufacturing, CV is used for quality control, detecting defects, and automating inspection processes on assembly lines.</p>
+</li>
+<li><p><strong>Agriculture</strong><br>Computer vision is helping in precision farming by analyzing images of crops to detect diseases, pests, and soil conditions. Drones equipped with vision systems are used to monitor large agricultural fields and provide data for efficient farming practices.</p>
+</li>
+<li><p><strong>Surveillance and Security</strong><br>CV is widely used in surveillance systems for detecting suspicious activities, recognizing faces, and tracking movements. It enhances public safety and security by enabling automated monitoring of large areas.</p>
+</li>
+</ol>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Computer vision is transforming industries by providing the ability to analyze and interpret visual data at a scale and precision far beyond human capabilities. With the continuous advancements in deep learning, the future of computer vision holds immense potential in diverse fields, from healthcare to autonomous driving. As the technology matures, it will continue to shape how we interact with machines and the world around us.</p>
+<hr>
+</article><div class="post-copyright"><div class="post-copyright__author_group"><div class="post-copyright__author_img"><img class="post-copyright__author_img_front" src="/img/logo.png"></div><div class="post-copyright__author_name">sleepynoctua</div><div class="post-copyright__author_desc"></div></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div id="quit-box" onclick="RemoveRewardMask()"></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">This piece of writing is an original article, utilizing the<a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en">CC BY-NC-SA 4.0</a>Agreement. For complete reproduction, please acknowledge the source as Courtesy of<a href="/">noctua's Wiki</a></span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Computer-Vision/"><span class="tags-punctuation"><i class="solitude fas fa-hashtag"></i>Computer Vision<span class="tagsPageCount">1</span></span></a><a class="post-meta__tags" href="/tags/Deep-Learning/"><span class="tags-punctuation"><i class="solitude fas fa-hashtag"></i>Deep Learning<span class="tagsPageCount">1</span></span></a><a class="post-meta__tags" href="/tags/Image-Processing/"><span class="tags-punctuation"><i class="solitude fas fa-hashtag"></i>Image Processing<span class="tagsPageCount">1</span></span></a><a class="post-meta__tags" href="/tags/AI/"><span class="tags-punctuation"><i class="solitude fas fa-hashtag"></i>AI<span class="tagsPageCount">1</span></span></a></div></div></div><nav class="needEndHide pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/02/05/hello-world/"><div class="pagination-info"><div class="label">Next</div><div class="next_info">Hello World</div></div></a></div></nav><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="solitude fas fa-comment"></i><span>  Comment</span></div></div><div class="comment-wrap"><div id="giscus-wrap"></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><div class="top-group"><div class="sayhi" id="sayhi" onclick="sco.changeWittyWord()"></div></div></div><div class="avatar"><img alt="Avatar" src="/img/logo.png"></div><div class="description"></div><div class="bottom-group"><span class="left"><div class="name">sleepynoctua</div><div class="desc"></div></span><div class="social-icons is-center"><a class="social-icon" target="_blank" rel="noopener" href="https://github.com/sleepynoctua" title="Github"><i class="solitude  fab fa-github"></i></a></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="solitude fas fa-bars"></i><span>Table of contents</span></div><div class="toc-content" id="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Introduction-to-Computer-Vision-CV"><span class="toc-text">Introduction to Computer Vision (CV)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#What-is-Computer-Vision"><span class="toc-text">What is Computer Vision?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Key-Challenges-in-Computer-Vision"><span class="toc-text">Key Challenges in Computer Vision</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Major-Areas-of-Computer-Vision"><span class="toc-text">Major Areas of Computer Vision</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Key-Techniques-in-Computer-Vision"><span class="toc-text">Key Techniques in Computer Vision</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Applications-of-Computer-Vision"><span class="toc-text">Applications of Computer Vision</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-text">Conclusion</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="solitude fas fa-map"></i><span>New posts</span></div><div class="aside-list"><a class="aside-list-item" href="/2025/02/06/cv/" title="Introduction to Computer Vision"><div class="content"><span class="title" href="/2025/02/06/cv/" title="Introduction to Computer Vision">Introduction to Computer Vision</span><span class="categories" href="/2025/02/06/cv/">CV</span></div></a><a class="aside-list-item" href="/2024/02/05/hello-world/" title="Hello World"><div class="content"><span class="title" href="/2024/02/05/hello-world/" title="Hello World">Hello World</span></div></a></div></div></div></div></main><footer id="footer"><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div class="copyright">© 2023 - 2025 By&nbsp;<a class="footer-bar-link" href="/"><img class="author-avatar" src="/img/pwa/favicon.png">sleepynoctua</a></div><div class="beian-group"></div></div></div></div></footer></div><!-- right_menu--><!-- inject body--><div><script src="/js/utils.js?v=3.0.10"></script><script src="/js/main.js?v=3.0.10"></script><script src="/js/third_party/waterfall.min.js?v=3.0.10"></script><script src="https://fastly.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script><script src="/js/third_party/universe.min.js?v=3.0.10"></script><script>dark()
+</script><script src="https://fastly.jsdelivr.net/npm/katex@0.16.21/dist/contrib/copy-tex.min.js"><script>(() => {
+  document.querySelectorAll('.article-container span.katex-display').forEach(item => {
+    utils.wrap(item, 'div', {class: 'katex-wrap'})
+  })
+})();
+</script></script><script src="https://fastly.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.js"></script><script>var meting_api = 'https://meting.qjqq.cn/?server=:server&type=:type&id=:id&auth=:auth&r=:r';</script><script src="https://fastly.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://fastly.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+utils.addGlobalFn('pjaxSend', () => {
+  Pace.restart()
+}, 'pace_restart')
+</script><script src="https://fastly.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><div class="js-pjax"><script>(()=>{
+    const getGiscusTheme = theme => {
+        return theme === 'dark' ? 'dark' : 'light'
+    }
+
+    const loadGiscus = () => {
+        const config = Object.assign({
+            src: 'https://giscus.app/client.js',
+            'data-repo': 'sleepynoctua/sleepynoctua.github.io',
+            'data-repo-id': 'R_kgDOLtxO8g',
+            'data-category-id': 'DIC_kwDOLtxO8s4Ceq3e',
+            'data-mapping': 'pathname',
+            'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+            'data-reactions-enabled': '1',
+            crossorigin: 'anonymous',
+            async: true
+        },null)
+
+        const ele = document.createElement('script')
+        for (let key in config) {
+            ele.setAttribute(key, config[key])
+        }
+        document.getElementById('giscus-wrap').appendChild(ele)
+    }
+
+    const changeGiscusTheme = theme => {
+        const sendMessage = message => {
+            const iframe = document.querySelector('iframe.giscus-frame')
+            if (!iframe) return
+            iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app')
+        }
+
+        sendMessage({
+            setConfig: {
+                theme: getGiscusTheme(theme)
+            }
+        });
+    }
+
+    utils.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+    if ('Giscus' === 'Giscus' || !false) {
+        if (false) {
+            const giscusWrap = document.getElementById('giscus-wrap')
+            if (giscusWrap) {
+                utils.loadComment(giscusWrap, loadGiscus)
+            }
+        } else {
+            loadGiscus()
+        }
+    } else {
+        window.loadTwoComment = loadGiscus
+    }
+})()</script></div></div><!-- pjax--><script>const pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: ["title","#body-wrap","#site-config","meta[name=\"description\"]",".js-pjax","meta[property^=\"og:\"]","#config-diff",".rs_show",".rs_hide"],
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+})
+
+document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+})
+
+document.addEventListener('pjax:complete', () => {
+    window.refreshFn()
+
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+        const newScript = document.createElement('script')
+        const content = item.text || item.textContent || item.innerHTML || ""
+        Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+        newScript.appendChild(document.createTextNode(content))
+        item.parentNode.replaceChild(newScript, item)
+    })
+
+    GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+})
+
+document.addEventListener('pjax:error', (e) => {
+    if (e.request.status === 404) {
+        pjax.loadUrl('/404.html')
+    }
+})</script><!-- google adsense--><!-- search--><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><button class="search-close-button"><i class="solitude fas fa-xmark"></i></button></nav><div class="search-wrap"><div class="search-box"><input class="search-box-input" id="search-input" type="text" autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off" placeholder="Enter keywords to search"></div><div id="search-results"><div id="search-hits"></div></div><div id="search-pagination"></div><div id="search-tips"></div></div></div><div id="search-mask"></div></div><script src="/js/search/local.js?v=3.0.10"></script><!-- Tianli-Talk--><!-- music--><div class="needEndHide" id="nav-music"><div id="nav-music-hoverTips" onclick="sco.musicToggle()">Paused</div><meting-js id="002eM3CA4CwE9L" server="tencent" type="song" mutex="true" preload="none" theme="var(--efu-main)" data-lrctype="0" order="random" volume="0.8"></meting-js></div></body></html>
+        <script>
+            const posts = ["2025/02/06/cv/","2024/02/05/hello-world/"];
+            function toRandomPost() {
+                const randomPost = posts[Math.floor(Math.random() * posts.length)];
+                pjax.loadUrl(GLOBAL_CONFIG.root + randomPost);
+            }
+        </script>
