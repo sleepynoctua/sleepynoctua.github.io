@@ -9,7 +9,7 @@ const coverColor = () => {
 }
 
 const handleApiColor = (path) => {
-    const cacheGroup = JSON.parse(localStorage.getItem('Eureka')) || { postcolor: {} };
+    const cacheGroup = JSON.parse(localStorage.getItem('Solitude')) || { postcolor: {} };
     const color = cacheGroup.postcolor[path]?.value;
     if (color) {
         setThemeColors(color);
@@ -58,9 +58,9 @@ const setDefaultThemeColors = () => {
 }
 
 const cacheColor = (src, color) => {
-    const cacheGroup = JSON.parse(localStorage.getItem('Eureka')) || { postcolor: {} };
+    const cacheGroup = JSON.parse(localStorage.getItem('Solitude')) || { postcolor: {} };
     cacheGroup.postcolor[src] = { value: color, expiration: Date.now() + coverColorConfig.time };
-    localStorage.setItem('Eureka', JSON.stringify(cacheGroup));
+    localStorage.setItem('Solitude', JSON.stringify(cacheGroup));
 }
 
 const adjustBrightness = (r, g, b) => {
@@ -69,7 +69,7 @@ const adjustBrightness = (r, g, b) => {
         document.querySelectorAll('.card-content').forEach(item => {
             item.style.setProperty('--efu-card-bg', 'var(--efu-white)');
         });
-        document.querySelectorAll('.author-info__sayhi').forEach(item => {
+        document.querySelectorAll('.sayhi').forEach(item => {
             item.style.setProperty('background', 'var(--efu-white-op)');
             item.style.setProperty('color', 'var(--efu-white)');
         });

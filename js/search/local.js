@@ -126,7 +126,7 @@ window.addEventListener("load", () => {
 
     function search(query) {
         const regex = new RegExp(query.split('').join('.*'), 'i');
-        return store.filter(page => regex.test(page.title) || regex.test(page.content));
+        return store.filter(page => regex.test(page.title));
     }
 
     function renderResults(results, page) {
