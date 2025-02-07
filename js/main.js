@@ -149,6 +149,15 @@ const handleThemeChange = mode => {
   Object.values(themeChange).forEach(fn => fn(mode));
 };
 
+let debounceTimeout;
+
+function debounce(func, wait) {
+  return function(...args) {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}
+
 const sco = {
   lastWittyWord: "",
   wasPageHidden: false,
@@ -357,7 +366,21 @@ const sco = {
       }
     }
   },
-  categoriesBarActive() {
+  // categoriesBarActive() {
+  //   const categoryBar = document.querySelector("#category-bar");
+  //   const currentPath = decodeURIComponent(window.location.pathname);
+  //   const isHomePage = currentPath === GLOBAL_CONFIG.root;
+  //   if (categoryBar) {
+  //     const categoryItems = categoryBar.querySelectorAll(".category-bar-item");
+  //     categoryItems.forEach(item => item.classList.remove("select"));
+  //     const activeItemId = isHomePage ? "category-bar-home" : currentPath.split("/").slice(-2, -1)[0];
+  //     const activeItem = document.getElementById(activeItemId);
+  //     if (activeItem) {
+  //       activeItem.classList.add("select");
+  //     }
+  //   }
+  // },
+  categoriesBarActive: debounce(function() {
     const categoryBar = document.querySelector("#category-bar");
     const currentPath = decodeURIComponent(window.location.pathname);
     const isHomePage = currentPath === GLOBAL_CONFIG.root;
@@ -370,7 +393,8 @@ const sco = {
         activeItem.classList.add("select");
       }
     }
-  },
+  }, 300), // 设置防抖时间为300毫秒
+
   scrollCategoryBarToRight() {
     const scrollBar = document.getElementById("category-bar-items");
     const nextElement = document.getElementById("category-bar-next");
