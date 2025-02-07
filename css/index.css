@@ -2449,8 +2449,9 @@ span.tags-punctuation i {
   opacity: 1;
 }
 .card-info .sayhi {
+  font-weight: 600;
   width: fit-content;
-  font-size: 12px;
+  font-size: 16px;
   background: var(--efu-white-op);
   border-radius: var(--radius);
   cursor: pointer;
@@ -2506,6 +2507,7 @@ span.tags-punctuation i {
   border-radius: 50%;
 }
 .card-info .description {
+  font-weight: 700;
   width: 100%;
   opacity: 0;
   transition: 0.3s;
@@ -2535,7 +2537,8 @@ span.tags-punctuation i {
   margin-bottom: 5px;
 }
 .card-info .bottom-group .left .desc {
-  font-size: 12px;
+  font-weight: 700;
+  font-size: 16px;
   color: var(--efu-card-bg);
   opacity: 0.6;
   line-height: 1;
