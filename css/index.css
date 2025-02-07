@@ -5061,9 +5061,6 @@ span.tags-punctuation {
     padding: 21px 16px;
   }
 }
-#category-bar .category-bar-items .category-bar-item.select {
-  order: -1;
-}
 #category-bar .category-bar-items .category-bar-item.select a {
   background: var(--efu-theme);
   color: var(--efu-white);
