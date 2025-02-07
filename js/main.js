@@ -61,10 +61,10 @@ const scrollFn = () => {
   window.addEventListener('scroll', (e) => {
     throttledScroll(e);
     if (window.scrollY === 0) {
-        $header.classList.remove('nav-fixed', 'nav-visible');
-        if ($rightside) {
-          $rightside.style.cssText = "opacity: ''; transform: ''";
-        }
+      $header.classList.remove('nav-fixed', 'nav-visible');
+      if ($rightside) {
+        $rightside.style.cssText = "opacity: ''; transform: ''";
+      }
     }
   });
 };
@@ -148,15 +148,6 @@ const handleThemeChange = mode => {
   const themeChange = window.globalFn?.themeChange || {};
   Object.values(themeChange).forEach(fn => fn(mode));
 };
-
-let debounceTimeout;
-
-function debounce(func, wait) {
-  return function(...args) {
-    clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(() => func.apply(this, args), wait);
-  };
-}
 
 const sco = {
   lastWittyWord: "",
@@ -366,21 +357,7 @@ const sco = {
       }
     }
   },
-  // categoriesBarActive() {
-  //   const categoryBar = document.querySelector("#category-bar");
-  //   const currentPath = decodeURIComponent(window.location.pathname);
-  //   const isHomePage = currentPath === GLOBAL_CONFIG.root;
-  //   if (categoryBar) {
-  //     const categoryItems = categoryBar.querySelectorAll(".category-bar-item");
-  //     categoryItems.forEach(item => item.classList.remove("select"));
-  //     const activeItemId = isHomePage ? "category-bar-home" : currentPath.split("/").slice(-2, -1)[0];
-  //     const activeItem = document.getElementById(activeItemId);
-  //     if (activeItem) {
-  //       activeItem.classList.add("select");
-  //     }
-  //   }
-  // },
-  categoriesBarActive: debounce(function() {
+  categoriesBarActive() {
     const categoryBar = document.querySelector("#category-bar");
     const currentPath = decodeURIComponent(window.location.pathname);
     const isHomePage = currentPath === GLOBAL_CONFIG.root;
@@ -393,8 +370,7 @@ const sco = {
         activeItem.classList.add("select");
       }
     }
-  }, 300), // 设置防抖时间为300毫秒
-
+  },
   scrollCategoryBarToRight() {
     const scrollBar = document.getElementById("category-bar-items");
     const nextElement = document.getElementById("category-bar-next");
@@ -509,15 +485,15 @@ const sco = {
     utils.addEventListenerPjax(switchBtn, 'click', handleSwitchBtn);
   },
   homeTypeit() {
-    if(typeof(home_subtitle) === 'undefined') return;
+    if (typeof (home_subtitle) === 'undefined') return;
     const ty = new TypeIt(".banners-title-small", {
-        speed: 200,
-        waitUntilVisible: true,
-        loop: true,
-        lifeLike: true,
+      speed: 200,
+      waitUntilVisible: true,
+      loop: true,
+      lifeLike: true,
     });
     home_subtitle.forEach(item => {
-        ty.type(item).pause(500).delete(item);
+      ty.type(item).pause(500).delete(item);
     });
     ty.go();
   }
