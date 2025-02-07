@@ -507,15 +507,15 @@ const addHighlight = () => {
   const $isShowTool = highlight.enable || copy || expand || limit;
   const expandClass = expand ? '' : 'closed';
   const $syntaxHighlight = syntax === 'highlight.js' ? document.querySelectorAll('figure.highlight') : document.querySelectorAll('pre[class*="language-"]');
-  
+
   if (!(($isShowTool || limit) && $syntaxHighlight.length)) return;
 
   const copyEle = copy ? `<i class="solitude fas fa-copy copy-button"></i>` : '<i></i>';
   const expandEle = `<i class="solitude fas fa-angle-down expand"></i>`;
   const limitEle = limit ? `<i class="solitude fas fa-angles-down"></i>` : '<i></i>';
-  
+
   const alertInfo = (ele, text) => utils.snackbarShow(text, false, 2000);
-  
+
   const copyFn = (e) => {
     const $buttonParent = e.parentNode;
     $buttonParent.classList.add('copy-true');
@@ -525,7 +525,9 @@ const addHighlight = () => {
     range.selectNodeContents($buttonParent.querySelectorAll(`${preCodeSelector}`)[0]);
     selection.removeAllRanges();
     selection.addRange(range);
-    document.execCommand('copy');
+    navigator.clipboard.writeText(selection.toString()).then(() => {
+      alertInfo(e.lastChild, GLOBAL_CONFIG.lang.copy.success);
+    });
     alertInfo(e.lastChild, GLOBAL_CONFIG.lang.copy.success);
     selection.removeAllRanges();
     $buttonParent.classList.remove('copy-true');
