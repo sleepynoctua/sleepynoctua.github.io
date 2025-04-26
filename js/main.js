@@ -802,3 +802,7 @@ window.onkeydown = e => {
 document.addEventListener('copy', () => {
   utils.snackbarShow(GLOBAL_CONFIG.lang.copy.success, false, 3000);
 });
+
+
+// 确保 DOMContentLoaded 事件触发时执行 categoriesBarActive
+document.addEventListener("DOMContentLoaded", categoriesBarActive);
