@@ -807,24 +807,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoryBar = document.querySelector("#category-bar");
   if (!categoryBar) return;
 
-  // 首次渲染时高亮
+  // 初次渲染时高亮
   categoriesBarActive();
 
   let isNavigating = false;
+  const items = categoryBar.querySelectorAll(".category-bar-item");
 
-  function lockNav(e) {
-    // 如果不是“主指针”或者已经在导航中，都一律拦截
+  // 1. 禁用系统默认的触摸高亮（inline style）
+  items.forEach(item => {
+    // 兼容 WebKit/Android 浏览器
+    item.style.webkitTapHighlightColor = "transparent";
+    // 也可兼容一下其它内核
+    item.style.tapHighlightColor = "transparent";
+  });
+
+  // 2. 在“捕获”阶段最先拦截所有指针按下事件
+  categoryBar.addEventListener("pointerdown", e => {
+    // 只允许第一根主指针、且未开始导航时放行一次
     if (!e.isPrimary || isNavigating) {
       e.preventDefault();
       e.stopImmediatePropagation();
       return;
     }
-    // 第一次唯一有效，锁定后续所有触控/点击
     isNavigating = true;
-  }
-
-  // 在捕获阶段最早拦截所有 pointerdown（涵盖触摸／鼠标／笔）
-  categoryBar.addEventListener("pointerdown", lockNav, {
+    // 之后页面会跳转或刷新，无需再手动恢复
+  }, {
     capture: true,
     passive: false
   });
