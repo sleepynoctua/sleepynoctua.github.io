@@ -813,16 +813,19 @@ document.addEventListener("DOMContentLoaded", () => {
   let isNavigating = false;
 
   function lockNav(e) {
-    // 如果已经在导航，就一律阻止
-    if (isNavigating) {
+    // 如果不是“主指针”或者已经在导航中，都一律拦截
+    if (!e.isPrimary || isNavigating) {
       e.preventDefault();
       e.stopImmediatePropagation();
       return;
     }
-    // 第一次触发时，立刻打锁
+    // 第一次唯一有效，锁定后续所有触控/点击
     isNavigating = true;
   }
 
-  // 在“捕获”阶段最先拦截所有 pointerdown（涵盖鼠标/触摸/手写笔）
-  categoryBar.addEventListener("pointerdown", lockNav, { capture: true, passive: false });
+  // 在捕获阶段最早拦截所有 pointerdown（涵盖触摸／鼠标／笔）
+  categoryBar.addEventListener("pointerdown", lockNav, {
+    capture: true,
+    passive: false
+  });
 });
