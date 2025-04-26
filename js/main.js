@@ -807,28 +807,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoryBar = document.querySelector("#category-bar");
   if (!categoryBar) return;
 
-  // 首次渲染时调用一次，保证高亮
+  // 首次渲染时高亮
   categoriesBarActive();
 
   let isNavigating = false;
 
-  // 一旦触发，就立刻锁住后续所有触发
-  const lockNav = (e) => {
+  function lockNav(e) {
+    // 如果已经在导航，就一律阻止
     if (isNavigating) {
       e.preventDefault();
       e.stopImmediatePropagation();
       return;
     }
+    // 第一次触发时，立刻打锁
     isNavigating = true;
-    // 屏蔽所有点击 & 触摸事件
-    categoryBar.style.pointerEvents = "none";
-    categoryBar.classList.add("navigating");
-  };
+  }
 
-  // 给每个 item 同时绑 click 和 touchstart
-  const items = categoryBar.querySelectorAll(".category-bar-item");
-  items.forEach(item => {
-    item.addEventListener("click", lockNav, { passive: false });
-    item.addEventListener("touchstart", lockNav, { passive: false });
-  });
+  // 在“捕获”阶段最先拦截所有 pointerdown（涵盖鼠标/触摸/手写笔）
+  categoryBar.addEventListener("pointerdown", lockNav, { capture: true, passive: false });
 });
