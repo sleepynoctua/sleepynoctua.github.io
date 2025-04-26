@@ -799,33 +799,21 @@ window.onkeydown = e => {
   }
 };
 
-function initCategoryBarClick() {
-  const categoryItems = document.querySelectorAll(".category-bar-item");
+document.addEventListener('copy', () => {
+  utils.snackbarShow(GLOBAL_CONFIG.lang.copy.success, false, 3000);
+});
 
-  categoryItems.forEach(item => {
-    item.addEventListener("click", (e) => {
-      // 禁用所有分类项的点击
-      categoryItems.forEach(i => {
-        i.style.pointerEvents = "none";
-      });
+// 确保 DOM 加载完毕后再执行
+document.addEventListener("DOMContentLoaded", () => {
+  const categoryBar = document.querySelector("#category-bar");
+  if (!categoryBar) return;
 
-      // 延迟恢复点击事件，确保页面跳转完成后再启用点击
-      setTimeout(() => {
-        categoryItems.forEach(i => {
-          i.style.pointerEvents = "";  // 恢复点击
-        });
-      }, 500);  // 延迟 500ms，可根据实际跳转时间调整
-    });
-  });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  // 初始化分类栏高亮和点击禁用
+  // 初次渲染时高亮
   categoriesBarActive();
-  initCategoryBarClick();
 
-  // 复制提示
-  document.addEventListener('copy', () => {
-    utils.snackbarShow(GLOBAL_CONFIG.lang.copy.success, false, 3000);
+  // 页面开始卸载（跳转）时，禁用所有点击
+  window.addEventListener("beforeunload", () => {
+    categoryBar.style.pointerEvents = "none";
+    categoryBar.classList.add("navigating");
   });
 });
