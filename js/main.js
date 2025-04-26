@@ -357,18 +357,66 @@ const sco = {
       }
     }
   },
+  // categoriesBarActive() {
+  //   const categoryBar = document.querySelector("#category-bar");
+  //   const currentPath = decodeURIComponent(window.location.pathname);
+  //   const isHomePage = currentPath === GLOBAL_CONFIG.root;
+  //   if (categoryBar) {
+  //     const categoryItems = categoryBar.querySelectorAll(".category-bar-item");
+  //     categoryItems.forEach(item => item.classList.remove("select"));
+  //     const activeItemId = isHomePage ? "category-bar-home" : currentPath.split("/").slice(-2, -1)[0];
+  //     const activeItem = document.getElementById(activeItemId);
+  //     if (activeItem) {
+  //       activeItem.classList.add("select");
+  //     }
+  //   }
+  // },
   categoriesBarActive() {
     const categoryBar = document.querySelector("#category-bar");
     const currentPath = decodeURIComponent(window.location.pathname);
     const isHomePage = currentPath === GLOBAL_CONFIG.root;
+
+    // 清理旧事件监听（防止重复绑定）
+    if (categoryBar) {
+      categoryBar.querySelectorAll(".category-bar-item").forEach(item => {
+        item.removeEventListener("click", this.handleCategoryClick);
+      });
+    }
+
     if (categoryBar) {
       const categoryItems = categoryBar.querySelectorAll(".category-bar-item");
-      categoryItems.forEach(item => item.classList.remove("select"));
-      const activeItemId = isHomePage ? "category-bar-home" : currentPath.split("/").slice(-2, -1)[0];
-      const activeItem = document.getElementById(activeItemId);
-      if (activeItem) {
-        activeItem.classList.add("select");
-      }
+
+      // 立即更新高亮状态
+      const updateActiveState = () => {
+        categoryItems.forEach(item => item.classList.remove("select"));
+        const activeItemId = isHomePage ? "category-bar-home" : currentPath.split("/").slice(-2, -1)[0];
+        const activeItem = document.getElementById(activeItemId);
+        activeItem?.classList.add("select");
+      };
+
+      // 添加点击处理
+      this.handleCategoryClick = (e) => {
+        e.preventDefault();
+        const target = e.currentTarget;
+
+        // 立即更新高亮状态
+        categoryItems.forEach(item => item.classList.remove("select"));
+        target.classList.add("select");
+
+        // 执行跳转（适配 PJAX）
+        if (typeof pjax !== 'undefined') {
+          pjax.loadUrl(target.href);
+        } else {
+          window.location.href = target.href;
+        }
+      };
+
+      // 绑定新事件
+      categoryItems.forEach(item => {
+        item.addEventListener("click", this.handleCategoryClick);
+      });
+
+      updateActiveState();
     }
   },
   scrollCategoryBarToRight() {
@@ -724,9 +772,6 @@ const scrollFnToDo = () => {
   if (toc) {
     const $cardTocLayout = document.getElementById('card-toc');
     const $cardToc = $cardTocLayout.querySelector('.toc-content');
-    const $tocLink = $cardToc.querySelectorAll('.toc-link');
-    const $tocPercentage = $cardTocLayout.querySelector('.toc-percentage');
-    const isExpand = $cardToc.classList.contains('is-expand');
 
     const tocItemClickFn = e => {
       const target = e.target.closest('.toc-link');
@@ -746,30 +791,6 @@ const forPostFn = () => {
   scrollFnToDo();
 };
 
-// 全局点击锁变量
-if (!window.__categoryClickLock__) {
-  window.__categoryClickLock__ = false;
-}
-
-// 点击锁初始化函数
-function initCategoryClickLock() {
-  document.querySelectorAll('#category-bar .category-bar-item').forEach(item => {
-    item.addEventListener('click', e => {
-      if (window.__categoryClickLock__) {
-        e.preventDefault();
-        e.stopImmediatePropagation(); // Safari 特别需要这个
-        return false;
-      } else {
-        window.__categoryClickLock__ = true;
-        setTimeout(() => {
-          window.__categoryClickLock__ = false;
-        }, 1000);
-      }
-    }, true); // 捕获阶段绑定，抢先执行
-  });
-}
-
-
 window.refreshFn = () => {
   const { is_home, is_page, page, is_post } = PAGE_CONFIG;
   const { runtime, lazyload, lightbox, randomlink, covercolor, post_ai, lure, expire } = GLOBAL_CONFIG;
@@ -777,7 +798,7 @@ window.refreshFn = () => {
   document.body.setAttribute('data-type', page);
   sco.changeTimeFormat(document.querySelectorAll(timeSelector));
   runtime && sco.addRuntime();
-  [scrollFn, sidebarFn, sco.addPhotoFigcaption, sco.setTimeState, sco.tagPageActive, sco.categoriesBarActive, initCategoryClickLock, sco.listenToPageInputPress, sco.addNavBackgroundInit, sco.refreshWaterFall].forEach(fn => fn());
+  [scrollFn, sidebarFn, sco.addPhotoFigcaption, sco.setTimeState, sco.tagPageActive, sco.categoriesBarActive, sco.listenToPageInputPress, sco.addNavBackgroundInit, sco.refreshWaterFall].forEach(fn => fn());
   lazyload.enable && utils.lazyloadImg();
   lightbox && utils.lightbox(document.querySelectorAll(".article-container img:not(.flink-avatar,.gallery-group img, .no-lightbox)"));
   randomlink && randomLinksList();
@@ -826,4 +847,3 @@ window.onkeydown = e => {
 document.addEventListener('copy', () => {
   utils.snackbarShow(GLOBAL_CONFIG.lang.copy.success, false, 3000);
 });
-
