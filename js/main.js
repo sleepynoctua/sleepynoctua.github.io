@@ -807,25 +807,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoryBar = document.getElementById("category-bar");
   if (!categoryBar) return;
 
-  // —— 一：禁用原生 tap-highlight（可选，但建议保留） ——
+  // （可选）彻底去掉浏览器自带的 tap-highlight
   categoryBar.querySelectorAll(".category-bar-item").forEach(item => {
     item.style.webkitTapHighlightColor = "transparent";
     item.style.tapHighlightColor = "transparent";
   });
 
-  // —— 二：真正“锁死”后续所有指针事件 ——
-  let isNav = false;
   categoryBar.addEventListener("pointerdown", e => {
-    // 只有第一根主指针、且还没跳转时才让它通过一次
-    if (!e.isPrimary || isNav) {
+    // 先看看是不是点到了分类项
+    const item = e.target.closest(".category-bar-item");
+    if (!item) return;
+
+    // 只让第一根手指通过一次，后续全拦截
+    if (!e.isPrimary) {
       e.preventDefault();
       e.stopImmediatePropagation();
       return;
     }
-    isNav = true;
-    // 彻底屏蔽后续所有点击/触摸
+
+    // 立刻清掉旧高亮，给当前项加上 select
+    categoryBar.querySelectorAll(".category-bar-item.select")
+      .forEach(it => it.classList.remove("select"));
+    item.classList.add("select");
+
+    // 锁死后续所有点击/触摸
     categoryBar.style.pointerEvents = "none";
   }, { capture: true, passive: false });
-
-  sco.categoriesBarActive();
 });
