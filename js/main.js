@@ -746,21 +746,29 @@ const forPostFn = () => {
   scrollFnToDo();
 };
 
-const initCategoryClickLock = () => {
-  let lock = false;
+// 全局点击锁变量
+if (!window.__categoryClickLock__) {
+  window.__categoryClickLock__ = false;
+}
+
+// 点击锁初始化函数
+function initCategoryClickLock() {
   document.querySelectorAll('#category-bar .category-bar-item').forEach(item => {
     item.addEventListener('click', e => {
-      if (lock) {
-        // 已经点过一次，就阻止后续点击
+      if (window.__categoryClickLock__) {
         e.preventDefault();
+        e.stopImmediatePropagation(); // Safari 特别需要这个
+        return false;
       } else {
-        lock = true;
-        // 1 秒后自动解锁（如果跳转失效，用户还能再试）
-        setTimeout(() => { lock = false; }, 1000);
+        window.__categoryClickLock__ = true;
+        setTimeout(() => {
+          window.__categoryClickLock__ = false;
+        }, 1000);
       }
-    });
+    }, true); // 捕获阶段绑定，抢先执行
   });
-};
+}
+
 
 window.refreshFn = () => {
   const { is_home, is_page, page, is_post } = PAGE_CONFIG;
