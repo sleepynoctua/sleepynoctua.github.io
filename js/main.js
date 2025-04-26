@@ -807,32 +807,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoryBar = document.querySelector("#category-bar");
   if (!categoryBar) return;
 
-  // 初次渲染时高亮
-  categoriesBarActive();
-
-  let isNavigating = false;
-  const items = categoryBar.querySelectorAll(".category-bar-item");
-
-  // 1. 禁用系统默认的触摸高亮（inline style）
-  items.forEach(item => {
-    // 兼容 WebKit/Android 浏览器
-    item.style.webkitTapHighlightColor = "transparent";
-    // 也可兼容一下其它内核
-    item.style.tapHighlightColor = "transparent";
+  // 禁用移动端的 tap-highlight 效果
+  categoryBar.querySelectorAll(".category-bar-item").forEach(item => {
+    item.style.webkitTapHighlightColor = "transparent";    // WebKit 内核
+    item.style.tapHighlightColor = "transparent";    // 其他内核
   });
 
-  // 2. 在“捕获”阶段最先拦截所有指针按下事件
-  categoryBar.addEventListener("pointerdown", e => {
-    // 只允许第一根主指针、且未开始导航时放行一次
-    if (!e.isPrimary || isNavigating) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      return;
-    }
-    isNavigating = true;
-    // 之后页面会跳转或刷新，无需再手动恢复
-  }, {
-    capture: true,
-    passive: false
-  });
+  // 剩下的你现有逻辑保持不变
+  sco.categoriesBarActive();
 });
