@@ -746,6 +746,22 @@ const forPostFn = () => {
   scrollFnToDo();
 };
 
+const initCategoryClickLock = () => {
+  let lock = false;
+  document.querySelectorAll('#category-bar .category-bar-item').forEach(item => {
+    item.addEventListener('click', e => {
+      if (lock) {
+        // 已经点过一次，就阻止后续点击
+        e.preventDefault();
+      } else {
+        lock = true;
+        // 1 秒后自动解锁（如果跳转失效，用户还能再试）
+        setTimeout(() => { lock = false; }, 1000);
+      }
+    });
+  });
+};
+
 window.refreshFn = () => {
   const { is_home, is_page, page, is_post } = PAGE_CONFIG;
   const { runtime, lazyload, lightbox, randomlink, covercolor, post_ai, lure, expire } = GLOBAL_CONFIG;
@@ -753,7 +769,7 @@ window.refreshFn = () => {
   document.body.setAttribute('data-type', page);
   sco.changeTimeFormat(document.querySelectorAll(timeSelector));
   runtime && sco.addRuntime();
-  [scrollFn, sidebarFn, sco.addPhotoFigcaption, sco.setTimeState, sco.tagPageActive, sco.categoriesBarActive, sco.listenToPageInputPress, sco.addNavBackgroundInit, sco.refreshWaterFall].forEach(fn => fn());
+  [scrollFn, sidebarFn, sco.addPhotoFigcaption, sco.setTimeState, sco.tagPageActive, sco.categoriesBarActive, initCategoryClickLock, sco.listenToPageInputPress, sco.addNavBackgroundInit, sco.refreshWaterFall].forEach(fn => fn());
   lazyload.enable && utils.lazyloadImg();
   lightbox && utils.lightbox(document.querySelectorAll(".article-container img:not(.flink-avatar,.gallery-group img, .no-lightbox)"));
   randomlink && randomLinksList();
@@ -803,20 +819,3 @@ document.addEventListener('copy', () => {
   utils.snackbarShow(GLOBAL_CONFIG.lang.copy.success, false, 3000);
 });
 
-// —— 立即高亮分类项 ——
-document.addEventListener('DOMContentLoaded', () => {
-  const categoryBar = document.getElementById('category-bar');
-  if (!categoryBar) return;
-
-  const items = categoryBar.querySelectorAll('.category-bar-item');
-  function immediateHighlight(e) {
-    items.forEach(i => i.classList.remove('select'));
-    this.classList.add('select');
-  }
-
-  items.forEach(item => {
-    // 手机端用 touchstart 优先，PC 端用 click
-    item.addEventListener('touchstart', immediateHighlight, { passive: true });
-    item.addEventListener('click', immediateHighlight, { passive: true });
-  });
-});
