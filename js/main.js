@@ -375,80 +375,39 @@ const sco = {
     const categoryBar = document.querySelector("#category-bar");
     if (!categoryBar) return;
 
-    // 精确路径匹配（包含query参数）
-    const currentFullPath = decodeURI(location.pathname + location.search);
-    const isHomePage = currentFullPath === GLOBAL_CONFIG.root;
+    // 1. 初始高亮逻辑
+    const currentPath = window.location.pathname;
+    const activeId = currentPath === GLOBAL_CONFIG.root
+      ? "category-bar-home"
+      : currentPath.split("/").filter(Boolean).pop(); // 准确获取最后一级路径
 
-    // 改进的选择器（避免污染其他元素）
-    const categoryItems = categoryBar.querySelectorAll(".category-bar-item:not(.exclude-active)");
-
-    // 状态锁定标识
-    if (!this._categoryLock) {
-      categoryItems.forEach(item => item.classList.remove("select"));
-    }
-
-    // 精确匹配逻辑
-    const activeItem = Array.from(categoryItems).find(item => {
-      try {
-        const itemUrl = new URL(item.href);
-        const itemFullPath = itemUrl.pathname + itemUrl.search;
-        return itemFullPath === currentFullPath;
-      } catch {
-        return false;
-      }
+    categoryBar.querySelectorAll(".category-bar-item").forEach(item => {
+      item.classList.remove("select");
+      if (item.id === activeId) item.classList.add("select");
     });
 
-    // 新增首页特殊匹配
-    const homeItem = document.getElementById("category-bar-home");
-    if (isHomePage && homeItem) {
-      homeItem?.classList.add("select");
-    } else if (activeItem) {
-      activeItem.classList.add("select");
-    }
+    // 2. 点击处理（仅需10行核心逻辑）
+    let isJumping = false; // 状态锁
 
-    // 移动端优化事件处理
-    const handleTap = (e) => {
-      const target = e.currentTarget;
+    categoryBar.querySelectorAll(".category-bar-item").forEach(item => {
+      item.addEventListener("click", (e) => {
+        if (isJumping) return; // 关键锁定
 
-      // 防止多点触控
-      if (e.touches?.length > 1) return;
+        // 立即更新高亮
+        categoryBar.querySelectorAll(".category-bar-item").forEach(el => el.classList.remove("select"));
+        item.classList.add("select");
 
-      // 立即视觉反馈
-      categoryItems.forEach(item => item.classList.remove("select"));
-      target.classList.add("select");
+        // 执行跳转
+        isJumping = true;
+        setTimeout(() => isJumping = false, 500); // 解锁延迟（按需调整）
 
-      // 状态锁定（移动端延长锁定时间）
-      this._categoryLock = true;
-      setTimeout(() => {
-        this._categoryLock = false;
-      }, 1500); // 根据平均页面加载时间调整
-
-      // 跳转执行（带PJAX兼容）
-      const performNavigation = () => {
+        // 正常跳转逻辑（保持原有逻辑不变）
         if (typeof pjax !== 'undefined') {
-          pjax.loadUrl(target.href);
+          pjax.loadUrl(item.href);
         } else {
-          window.location.href = target.href;
+          window.location.href = item.href;
         }
-      };
-
-      // 移动端优先使用touchend事件
-      if (e.type === 'touchend') {
-        e.preventDefault();
-        performNavigation();
-      }
-    };
-
-    // 移除旧监听器防止重复
-    categoryItems.forEach(item => {
-      item.removeEventListener('click', handleTap);
-      item.removeEventListener('touchend', handleTap);
-    });
-
-    // 添加优化后的事件监听（同时处理点击和触摸）
-    categoryItems.forEach(item => {
-      item.addEventListener('click', handleTap);
-      item.addEventListener('touchend', handleTap);
+      });
     });
   },
   scrollCategoryBarToRight() {
