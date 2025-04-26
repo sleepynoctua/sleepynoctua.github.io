@@ -372,43 +372,28 @@ const sco = {
   //   }
   // },
   categoriesBarActive() {
+    // 判断是否为移动端（两种方式任选其一）
+    const isMobile = window.matchMedia("(max-width: 768px)").matches; // 方式1：媒体查询
+    // const isMobile = /Mobi|Android/i.test(navigator.userAgent); // 方式2：UA检测
+
+    if (isMobile) return; // 移动端直接终止高亮逻辑
+
+    // PC端保持原有逻辑
     const categoryBar = document.querySelector("#category-bar");
-    if (!categoryBar) return;
+    const currentPath = decodeURIComponent(window.location.pathname);
+    const isHomePage = currentPath === GLOBAL_CONFIG.root;
 
-    // 1. 初始高亮逻辑
-    const currentPath = window.location.pathname;
-    const activeId = currentPath === GLOBAL_CONFIG.root
-      ? "category-bar-home"
-      : currentPath.split("/").filter(Boolean).pop(); // 准确获取最后一级路径
-
-    categoryBar.querySelectorAll(".category-bar-item").forEach(item => {
-      item.classList.remove("select");
-      if (item.id === activeId) item.classList.add("select");
-    });
-
-    // 2. 点击处理（仅需10行核心逻辑）
-    let isJumping = false; // 状态锁
-
-    categoryBar.querySelectorAll(".category-bar-item").forEach(item => {
-      item.addEventListener("click", (e) => {
-        if (isJumping) return; // 关键锁定
-
-        // 立即更新高亮
-        categoryBar.querySelectorAll(".category-bar-item").forEach(el => el.classList.remove("select"));
-        item.classList.add("select");
-
-        // 执行跳转
-        isJumping = true;
-        setTimeout(() => isJumping = false, 500); // 解锁延迟（按需调整）
-
-        // 正常跳转逻辑（保持原有逻辑不变）
-        if (typeof pjax !== 'undefined') {
-          pjax.loadUrl(item.href);
-        } else {
-          window.location.href = item.href;
+    if (categoryBar) {
+      categoryBar.querySelectorAll(".category-bar-item").forEach(item => {
+        item.classList.remove("select");
+        const itemPath = new URL(item.href).pathname;
+        if (isHomePage && item.id === "category-bar-home") {
+          item.classList.add("select");
+        } else if (itemPath === currentPath) {
+          item.classList.add("select");
         }
       });
-    });
+    }
   },
   scrollCategoryBarToRight() {
     const scrollBar = document.getElementById("category-bar-items");
