@@ -803,17 +803,32 @@ document.addEventListener('copy', () => {
   utils.snackbarShow(GLOBAL_CONFIG.lang.copy.success, false, 3000);
 });
 
-// 确保 DOM 加载完毕后再执行
 document.addEventListener("DOMContentLoaded", () => {
   const categoryBar = document.querySelector("#category-bar");
   if (!categoryBar) return;
 
-  // 初次渲染时高亮
+  // 首次渲染时调用一次，保证高亮
   categoriesBarActive();
 
-  // 页面开始卸载（跳转）时，禁用所有点击
-  window.addEventListener("beforeunload", () => {
+  let isNavigating = false;
+
+  // 一旦触发，就立刻锁住后续所有触发
+  const lockNav = (e) => {
+    if (isNavigating) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      return;
+    }
+    isNavigating = true;
+    // 屏蔽所有点击 & 触摸事件
     categoryBar.style.pointerEvents = "none";
     categoryBar.classList.add("navigating");
+  };
+
+  // 给每个 item 同时绑 click 和 touchstart
+  const items = categoryBar.querySelectorAll(".category-bar-item");
+  items.forEach(item => {
+    item.addEventListener("click", lockNav, { passive: false });
+    item.addEventListener("touchstart", lockNav, { passive: false });
   });
 });
