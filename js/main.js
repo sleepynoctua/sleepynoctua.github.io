@@ -803,34 +803,20 @@ document.addEventListener('copy', () => {
   utils.snackbarShow(GLOBAL_CONFIG.lang.copy.success, false, 3000);
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  const categoryBar = document.getElementById("category-bar");
+// —— 立即高亮分类项 ——
+document.addEventListener('DOMContentLoaded', () => {
+  const categoryBar = document.getElementById('category-bar');
   if (!categoryBar) return;
 
-  // （可选）彻底去掉浏览器自带的 tap-highlight
-  categoryBar.querySelectorAll(".category-bar-item").forEach(item => {
-    item.style.webkitTapHighlightColor = "transparent";
-    item.style.tapHighlightColor = "transparent";
+  const items = categoryBar.querySelectorAll('.category-bar-item');
+  function immediateHighlight(e) {
+    items.forEach(i => i.classList.remove('select'));
+    this.classList.add('select');
+  }
+
+  items.forEach(item => {
+    // 手机端用 touchstart 优先，PC 端用 click
+    item.addEventListener('touchstart', immediateHighlight, { passive: true });
+    item.addEventListener('click', immediateHighlight, { passive: true });
   });
-
-  categoryBar.addEventListener("pointerdown", e => {
-    // 先看看是不是点到了分类项
-    const item = e.target.closest(".category-bar-item");
-    if (!item) return;
-
-    // 只让第一根手指通过一次，后续全拦截
-    if (!e.isPrimary) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      return;
-    }
-
-    // 立刻清掉旧高亮，给当前项加上 select
-    categoryBar.querySelectorAll(".category-bar-item.select")
-      .forEach(it => it.classList.remove("select"));
-    item.classList.add("select");
-
-    // 锁死后续所有点击/触摸
-    categoryBar.style.pointerEvents = "none";
-  }, { capture: true, passive: false });
 });
