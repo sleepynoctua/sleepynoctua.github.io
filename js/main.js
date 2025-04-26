@@ -799,10 +799,28 @@ window.onkeydown = e => {
   }
 };
 
-document.addEventListener('copy', () => {
-  utils.snackbarShow(GLOBAL_CONFIG.lang.copy.success, false, 3000);
+document.addEventListener('DOMContentLoaded', () => {
+  // 防止跳转时多次点击分类项
+  initCategoryBarClick();
+
+  // 复制提示
+  document.addEventListener('copy', () => {
+    utils.snackbarShow(GLOBAL_CONFIG.lang.copy.success, false, 3000);
+  });
 });
 
-
-// 确保 DOMContentLoaded 事件触发时执行 categoriesBarActive
-document.addEventListener("DOMContentLoaded", categoriesBarActive);
+function initCategoryBarClick() {
+  const categoryItems = document.querySelectorAll(".category-bar-item");
+  categoryItems.forEach(item => {
+    item.addEventListener("click", () => {
+      categoryItems.forEach(i => {
+        i.style.pointerEvents = "none";
+      });
+      setTimeout(() => {
+        categoryItems.forEach(i => {
+          i.style.pointerEvents = "";
+        });
+      }, 1000);
+    });
+  });
+}
