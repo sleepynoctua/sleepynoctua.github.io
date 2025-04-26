@@ -799,8 +799,29 @@ window.onkeydown = e => {
   }
 };
 
+function initCategoryBarClick() {
+  const categoryItems = document.querySelectorAll(".category-bar-item");
+
+  categoryItems.forEach(item => {
+    item.addEventListener("click", (e) => {
+      // 禁用所有分类项的点击
+      categoryItems.forEach(i => {
+        i.style.pointerEvents = "none";
+      });
+
+      // 延迟恢复点击事件，确保页面跳转完成后再启用点击
+      setTimeout(() => {
+        categoryItems.forEach(i => {
+          i.style.pointerEvents = "";  // 恢复点击
+        });
+      }, 500);  // 延迟 500ms，可根据实际跳转时间调整
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  // 防止跳转时多次点击分类项
+  // 初始化分类栏高亮和点击禁用
+  categoriesBarActive();
   initCategoryBarClick();
 
   // 复制提示
@@ -808,19 +829,3 @@ document.addEventListener('DOMContentLoaded', () => {
     utils.snackbarShow(GLOBAL_CONFIG.lang.copy.success, false, 3000);
   });
 });
-
-function initCategoryBarClick() {
-  const categoryItems = document.querySelectorAll(".category-bar-item");
-  categoryItems.forEach(item => {
-    item.addEventListener("click", () => {
-      categoryItems.forEach(i => {
-        i.style.pointerEvents = "none";
-      });
-      setTimeout(() => {
-        categoryItems.forEach(i => {
-          i.style.pointerEvents = "";
-        });
-      }, 1000);
-    });
-  });
-}
