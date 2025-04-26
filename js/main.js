@@ -357,43 +357,19 @@ const sco = {
       }
     }
   },
-  // categoriesBarActive() {
-  //   const categoryBar = document.querySelector("#category-bar");
-  //   const currentPath = decodeURIComponent(window.location.pathname);
-  //   const isHomePage = currentPath === GLOBAL_CONFIG.root;
-  //   if (categoryBar) {
-  //     const categoryItems = categoryBar.querySelectorAll(".category-bar-item");
-  //     categoryItems.forEach(item => item.classList.remove("select"));
-  //     const activeItemId = isHomePage ? "category-bar-home" : currentPath.split("/").slice(-2, -1)[0];
-  //     const activeItem = document.getElementById(activeItemId);
-  //     if (activeItem) {
-  //       activeItem.classList.add("select");
-  //     }
-  //   }
-  // },
   categoriesBarActive() {
-    // 判断是否为移动端（两种方式任选其一）
-    const isMobile = window.matchMedia("(max-width: 768px)").matches; // 方式1：媒体查询
-    // const isMobile = /Mobi|Android/i.test(navigator.userAgent); // 方式2：UA检测
-
-    if (isMobile) return; // 移动端直接终止高亮逻辑
-
-    // PC端保持原有逻辑
-    const categoryBar = document.querySelector("#category-bar");
-    const currentPath = decodeURIComponent(window.location.pathname);
-    const isHomePage = currentPath === GLOBAL_CONFIG.root;
-
-    if (categoryBar) {
-      categoryBar.querySelectorAll(".category-bar-item").forEach(item => {
-        item.classList.remove("select");
-        const itemPath = new URL(item.href).pathname;
-        if (isHomePage && item.id === "category-bar-home") {
-          item.classList.add("select");
-        } else if (itemPath === currentPath) {
-          item.classList.add("select");
-        }
-      });
-    }
+    // const categoryBar = document.querySelector("#category-bar");
+    // const currentPath = decodeURIComponent(window.location.pathname);
+    // const isHomePage = currentPath === GLOBAL_CONFIG.root;
+    // if (categoryBar) {
+    //   const categoryItems = categoryBar.querySelectorAll(".category-bar-item");
+    //   categoryItems.forEach(item => item.classList.remove("select"));
+    //   const activeItemId = isHomePage ? "category-bar-home" : currentPath.split("/").slice(-2, -1)[0];
+    //   const activeItem = document.getElementById(activeItemId);
+    //   if (activeItem) {
+    //     activeItem.classList.add("select");
+    //   }
+    // }
   },
   scrollCategoryBarToRight() {
     const scrollBar = document.getElementById("category-bar-items");
