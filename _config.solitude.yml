@@ -61,9 +61,9 @@ nav:
 hometop:
   enable: false
   banner:
-    title: 分享技术<br >与科技生活 # 大字
+    title: 1 # 大字
     desc:
-      一个热爱生活的人 # 小字
+      1 # 小字
       # - 我只是一个普通的程序员
       # - 但我有一个不平凡的梦想
       # - 我希望能够改变世界
@@ -132,7 +132,7 @@ aside:
     # 介绍 / Introduction
     description: INTJ
     # 内容 / Content
-    content: Read to enlighten, think to grow, code to create.
+    content: keep thinking, keep coding.
 
     # social
     # 社交信息图标
