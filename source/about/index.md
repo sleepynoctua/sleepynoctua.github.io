@@ -6,9 +6,9 @@ layout: page
 
 ## Introduction
 
-Welcome to my personal Wiki! This space is dedicated to sharing my thoughts, experiences, and knowledge on various topics, including technology, coding, and life insights. Whether you're here for learning, inspiration, or casual reading, I hope you find something valuable.
+Welcome to my personal Blog! This space is dedicated to sharing my thoughts, experiences, and knowledge on various topics, including technology, coding, and life insights. Whether you're here for learning, inspiration, or casual reading, I hope you find something valuable.
 
-## Why This Wiki Exists?
+## Why This Blog Exists?
 
 I created this blog to document my learning journey, reflect on interesting ideas, and engage with a like-minded community. Writing helps me organize my thoughts and deepen my understanding of different subjects.
 

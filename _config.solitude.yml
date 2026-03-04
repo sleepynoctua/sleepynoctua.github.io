@@ -132,7 +132,7 @@ aside:
     # 介绍 / Introduction
     description: INTJ
     # 内容 / Content
-    content: keep thinking, keep coding.
+    content: ( ) -> { }
 
     # social
     # 社交信息图标
