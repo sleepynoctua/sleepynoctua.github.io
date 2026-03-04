@@ -363,12 +363,13 @@ const sco = {
     const isHomePage = currentPath === GLOBAL_CONFIG.root;
     if (categoryBar) {
       const categoryItems = categoryBar.querySelectorAll(".category-bar-item");
-      categoryItems.forEach(item => item.classList.remove("select"));
       const activeItemId = isHomePage ? "category-bar-home" : currentPath.split("/").slice(-2, -1)[0];
-      const activeItem = document.getElementById(activeItemId);
-      if (activeItem) {
-        activeItem.classList.add("select");
-      }
+      categoryItems.forEach(item => {
+        item.classList.remove("select");
+        if (item.id === activeItemId) {
+          item.classList.add("select");
+        }
+      });
     }
   },
   scrollCategoryBarToRight() {
