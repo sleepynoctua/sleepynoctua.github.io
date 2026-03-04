@@ -33,10 +33,7 @@ div
     script.
       dark()
 
-  if theme.translate.enable
-    script(src=url_for(theme.cdn.translate_js))
 
-  if theme.katex && theme.katex.enable
     if theme.katex.per_page && (is_post() || is_page())
       +katex
     else if page.katex

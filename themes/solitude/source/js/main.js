@@ -262,6 +262,7 @@ const sco = {
           setTimeout(() => {
             waterfall(entry.target).then(() => {
               entry.target.classList.add('show');
+              typeof percent === 'function' && percent();
             });
           }, 300);
         }
@@ -778,7 +779,7 @@ window.refreshFn = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  [addCopyright, window.refreshFn, asideStatus, () => window.onscroll = percent, sco.initConsoleState].forEach(fn => fn());
+  [addCopyright, window.refreshFn, asideStatus, () => window.onscroll = utils.throttle(percent, 100), sco.initConsoleState].forEach(fn => fn());
 });
 
 document.addEventListener('visibilitychange', () => {

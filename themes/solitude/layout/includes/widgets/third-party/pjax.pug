@@ -30,6 +30,7 @@ script.
         })
 
         GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+        setTimeout(() => { typeof percent === 'function' && percent(); }, 500);
 
     })
 

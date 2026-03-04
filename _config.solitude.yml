@@ -403,9 +403,7 @@ right_menu:
   # Whether to display the browser's context menu when hold Ctrl key.
   # 是否在按住 Ctrl 键时显示浏览器右键菜单
   ctrlOriginalMenu: false
-  # Simplified and Traditional Chinese translation.
-  # 简繁体转换
-  translate: false
+
   # Custom list
   # 自定义列表
   custom_list:
@@ -480,10 +478,7 @@ console:
 # --------------------------- end ---------------------------
 
 # --------------------------- start ---------------------------
-translate:
-  enable: false
-  defaultEncoding: 2 # 1: 默认繁体 2: 默认简体
-  translateDelay: 0 # 首次加载翻译迟疑时间
+
 # --------------------------- end ---------------------------
 
 # --------------------------- start ---------------------------
@@ -494,7 +489,6 @@ rightside:
   percent: true
   hide:
     enable: true
-    translate: false
     mode: true
     aside: true
 # --------------------------- start ---------------------------
@@ -565,7 +559,7 @@ errorpage:
 # can only use NetEase Cloud Music, QQ Music and other music platforms supported by the mainland China region,
 # the subsequent consideration of the use of JSON files to store music information and customize the implementation of the third-party API does not depend on the page.
 # Music Page
-meting_api: "https://meting.qjqq.cn/?server=:server&type=:type&id=:id&auth=:auth&r=:r" # Custom API
+meting_api: "https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&auth=:auth&r=:r" # Custom API
 # --------------------------- end ---------------------------
 
 # --------------------------- start ---------------------------
@@ -574,10 +568,10 @@ meting_api: "https://meting.qjqq.cn/?server=:server&type=:type&id=:id&auth=:auth
 capsule:
   enable: true
   # 歌单 ID / 单曲 ID
-  id: 002eM3CA4CwE9L
+  id: 2612972707
   # 服务商：netease / qq / xiami / kugou / baidu
-  server: tencent
-  # 类型：playlist / song
+  server: netease
+  # 类型：song
   type: song
   volume: 0.8
 # --------------------------- end ---------------------------

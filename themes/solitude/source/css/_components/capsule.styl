@@ -199,29 +199,10 @@
       border: none
 
     .aplayer-lrc
-      width: 0
-      opacity: 0
-      transition: 0.3s
-      margin-bottom: -15px
-
-      p.aplayer-lrc-current
-        color: var(--efu-white)
-        border: none
-        min-height: 20px
-        filter: none
-
-      &:after,
-      &:before
-        display: none
-
-      p
-        color: #ffffffb3
-        filter: blur(.8px)
+      display: none !important
 
   &.stretch .aplayer.aplayer-withlrc .aplayer-lrc
-    width: 200px
-    margin-left: 8px
-    opacity: 1
+      display: none !important
 
 .aplayer-thumb
   width: 0 !important

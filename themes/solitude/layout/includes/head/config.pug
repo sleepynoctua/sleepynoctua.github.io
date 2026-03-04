@@ -115,20 +115,11 @@
                 close: _p('right_menu.barrage.close')
             }
         }
-        if (theme.translate.enable) {
-            rightMenu.translate = theme.right_menu.translate
-        }
         if (theme.right_menu.ctrlOriginalMenu)
             rightMenu.ctrlOriginalMenu = _p('right_menu.ctrl_original_menu')
     }
 
-    let translate = false
-    if (theme.translate.enable) {
-        translate = {
-            translateDelay: theme.translate.translateDelay,
-            defaultEncoding: theme.translate.defaultEncoding
-        }
-    }
+
 
     let highlight = false
     if (theme.highlight.enable) {
@@ -193,7 +184,6 @@ script.
         lightbox: '!{ theme.mediumZoom ? "mediumZoom" : (theme.fancybox ? "fancybox" : "null")}',
         post_ai: !{post_ai},
         right_menu: !{rightMenu ? JSON.stringify(rightMenu) : false},
-        translate: !{translate ? JSON.stringify(translate) : false},
         lure: !{lure ? JSON.stringify(lure) : false},
         expire: !{expire ? JSON.stringify(expire) : false},
     };
