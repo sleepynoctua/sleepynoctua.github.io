@@ -125,8 +125,26 @@ window.addEventListener("load", () => {
     }
 
     function search(query) {
-        const regex = new RegExp(query.split('').join('.*'), 'i');
-        return store.filter(page => regex.test(page.title));
+        const keywords = query.toLowerCase().split(/\s+/).filter(k => k.length > 0);
+        if (!keywords.length) return [];
+
+        const titleMatches = [];
+        const contentMatches = [];
+
+        store.forEach(page => {
+            const titleLower = page.title.toLowerCase();
+            const contentLower = page.content.toLowerCase();
+            const titleHit = keywords.every(k => titleLower.includes(k));
+            const contentHit = keywords.every(k => contentLower.includes(k));
+
+            if (titleHit) {
+                titleMatches.push(page);
+            } else if (contentHit) {
+                contentMatches.push(page);
+            }
+        });
+
+        return [...titleMatches, ...contentMatches];
     }
 
     function renderResults(results, page) {
@@ -151,6 +169,15 @@ window.addEventListener("load", () => {
             $link.href = result.link;
             $link.innerHTML = highlightSearchKeyword(result.title, query);
             $result.appendChild($link);
+
+            const snippet = getContentSnippet(result.content, query);
+            if (snippet) {
+                const $snippet = document.createElement("p");
+                $snippet.className = "search-result-content";
+                $snippet.innerHTML = snippet;
+                $result.appendChild($snippet);
+            }
+
             $search_results.appendChild($result);
         });
         const count = document.createElement("span");
@@ -159,9 +186,30 @@ window.addEventListener("load", () => {
         $tips.appendChild(count);
     }
 
+    function escapeRegExp(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
     function highlightSearchKeyword(text, keyword) {
-        const regex = new RegExp(`(${keyword.split(' ').join('|')})`, 'gi');
+        const keywords = keyword.trim().split(/\s+/).filter(k => k.length > 0);
+        const pattern = keywords.map(escapeRegExp).join('|');
+        const regex = new RegExp(`(${pattern})`, 'gi');
         return text.replace(regex, '<em>$1</em>');
+    }
+
+    function getContentSnippet(content, keyword) {
+        const keywords = keyword.trim().split(/\s+/).filter(k => k.length > 0);
+        const lowerContent = content.toLowerCase();
+        let firstIdx = -1;
+        for (const k of keywords) {
+            const idx = lowerContent.indexOf(k.toLowerCase());
+            if (idx !== -1 && (firstIdx === -1 || idx < firstIdx)) firstIdx = idx;
+        }
+        if (firstIdx === -1) return '';
+        const snippetStart = Math.max(0, firstIdx - 30);
+        const snippetEnd = Math.min(content.length, firstIdx + 80);
+        let snippet = (snippetStart > 0 ? '...' : '') + content.substring(snippetStart, snippetEnd) + (snippetEnd < content.length ? '...' : '');
+        return highlightSearchKeyword(snippet, keyword);
     }
 
     function renderPagination(totalResults) {

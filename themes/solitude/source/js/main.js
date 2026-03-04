@@ -78,13 +78,26 @@ const percent = () => {
   const navToTop = document.querySelector("#nav-totop");
   const rsToTop = document.querySelector(".rs_show .top i");
   const percentDisplay = document.querySelector("#percent");
-  const isNearEnd = (window.scrollY + docEl.clientHeight) >= (document.getElementById("post-comment") || document.getElementById("footer")).offsetTop;
+  const endEl = document.getElementById("post-comment") || document.getElementById("footer");
+  const isNearEnd = endEl ? (window.scrollY + docEl.clientHeight) >= endEl.offsetTop : false;
 
   navToTop?.classList.toggle("long", isNearEnd || scrolledPercent > 90);
   rsToTop?.classList.toggle("show", isNearEnd || scrolledPercent > 90);
-  percentDisplay.textContent = isNearEnd || scrolledPercent > 90 ? (navToTop ? GLOBAL_CONFIG.lang.backtop : '') : scrolledPercent;
+  if (percentDisplay) percentDisplay.textContent = isNearEnd || scrolledPercent > 90 ? (navToTop ? GLOBAL_CONFIG.lang.backtop : '') : scrolledPercent;
 
-  document.querySelectorAll(".needEndHide").forEach(item => item.classList.toggle("hide", totalScrollableHeight - scrollPos < 100));
+};
+
+let _needEndHideObserver = null;
+const initNeedEndHideObserver = () => {
+  if (_needEndHideObserver) _needEndHideObserver.disconnect();
+  const footer = document.getElementById('footer');
+  if (!footer) return;
+  _needEndHideObserver = new IntersectionObserver(([entry]) => {
+    document.querySelectorAll('.needEndHide').forEach(item =>
+      item.classList.toggle('hide', entry.isIntersecting)
+    );
+  }, { threshold: 0 });
+  _needEndHideObserver.observe(footer);
 };
 
 const showTodayCard = () => {
@@ -752,7 +765,7 @@ window.refreshFn = () => {
   document.body.setAttribute('data-type', page);
   sco.changeTimeFormat(document.querySelectorAll(timeSelector));
   runtime && sco.addRuntime();
-  [scrollFn, sidebarFn, sco.addPhotoFigcaption, sco.setTimeState, sco.tagPageActive, sco.categoriesBarActive, sco.listenToPageInputPress, sco.addNavBackgroundInit, sco.refreshWaterFall].forEach(fn => fn());
+  [scrollFn, sidebarFn, sco.addPhotoFigcaption, sco.setTimeState, sco.tagPageActive, sco.categoriesBarActive, sco.listenToPageInputPress, sco.addNavBackgroundInit, sco.refreshWaterFall, initNeedEndHideObserver].forEach(fn => fn());
   lazyload.enable && utils.lazyloadImg();
   lightbox && utils.lightbox(document.querySelectorAll(".article-container img:not(.flink-avatar,.gallery-group img, .no-lightbox)"));
   randomlink && randomLinksList();
